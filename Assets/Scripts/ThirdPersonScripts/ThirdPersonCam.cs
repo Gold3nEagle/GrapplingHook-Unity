@@ -21,7 +21,7 @@ public class ThirdPersonCam : MonoBehaviour
 
     private void Update()
     {
-        Vector3 viewDirection = Player.position - new Vector3(transform.position.x, transform.position.y, transform.position.z);
+        Vector3 viewDirection = Player.position - new Vector3(transform.position.x, Player.position.y, transform.position.z);
         Orientation.forward = viewDirection.normalized;
 
         float horizontalInput = Input.GetAxis("Horizontal");
