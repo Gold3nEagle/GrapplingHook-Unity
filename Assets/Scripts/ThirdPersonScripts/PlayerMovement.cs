@@ -126,6 +126,7 @@ public class PlayerMovement : MonoBehaviour
     {
         ActiveGrapple = true;
         velocityToSet = CalculateJumpVelocity(transform.position, targetPosition, trajectoryHeight);
+        velocityToSet = velocityToSet + (Vector3.up * 2);
         Invoke(nameof(SetVelocity), 0.1f);
     }
 

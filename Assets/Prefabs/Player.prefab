@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 7720301707466635855}
   m_Layer: 0
   m_Name: GrappleGun
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -206,7 +206,7 @@ GameObject:
   - component: {fileID: 1855847181988581755}
   m_Layer: 0
   m_Name: CombatLookAt
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -236,7 +236,7 @@ GameObject:
   - component: {fileID: 2442790501415271057}
   m_Layer: 0
   m_Name: Orientation
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -270,7 +270,7 @@ GameObject:
   - component: {fileID: 2442790501949507515}
   m_Layer: 0
   m_Name: Cube
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -447,9 +447,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   gunLineRenderer: {fileID: 7720301707466635855}
-  maxGrappleDistance: 25
+  maxGrappleDistance: 50
   grappleDelayTime: 0.25
-  overshootYAxis: 1
+  overshootYAxis: 2
   grapplePoint: {x: 0, y: 0, z: 0}
   grapplingCoolDown: 1
   grapplingCoolDownTimer: 0
@@ -563,7 +563,7 @@ GameObject:
   - component: {fileID: 3331644084668825120}
   m_Layer: 0
   m_Name: GunTip
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
