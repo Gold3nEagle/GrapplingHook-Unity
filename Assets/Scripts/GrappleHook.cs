@@ -43,7 +43,7 @@ public class GrappleHook : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0)) StartGrapple();
+        if (Input.GetKey(grappleKey)) StartGrapple();
 
         if (grapplingCoolDownTimer > 0)
             grapplingCoolDownTimer -= Time.deltaTime;
@@ -129,7 +129,7 @@ public class GrappleHook : MonoBehaviour
         if (grapplePointRealtiveYPos < 0) highestPointOnArc = overshootYAxis;
 
         playerMovement.JumpToPosition(grapplePoint, highestPointOnArc, grappleType);
-        Invoke(nameof(StopGrapple), 1f);
+        Invoke(nameof(StopGrapple), .25f);
 
     }
 

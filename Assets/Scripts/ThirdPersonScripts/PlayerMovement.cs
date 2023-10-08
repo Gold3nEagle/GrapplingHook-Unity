@@ -26,6 +26,7 @@ public class PlayerMovement : MonoBehaviour
     
     public bool Freeze = false;
     public bool ActiveGrapple;
+    private bool hasStarted = false; 
 
     private float horizontalInput;
     private float verticalInput;
@@ -165,11 +166,15 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (!hasStarted)
+        {
+            hasStarted = true;
+            return;
+        }
+
         if (enableMovementOnNextTouch)
         {
-            enableMovementOnNextTouch = false;
-            ResetRestrictions();
-
+            enableMovementOnNextTouch = false; 
             GetComponent<GrappleHook>().StopGrapple();
         }
 
@@ -184,6 +189,16 @@ public class PlayerMovement : MonoBehaviour
         {
             Destroy(collision.gameObject);
         } 
+
+        if(collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        { 
+                if (ActiveGrapple)
+                    Debug.LogError("You're not Dead!");
+                else
+                    Debug.LogError("You're Dead!"); 
+        }
+
+        ResetRestrictions();
     }
 
 }
