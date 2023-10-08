@@ -6,9 +6,7 @@ public class PlayerMovement : MonoBehaviour
 {
     [Header("Movement")]
     public float MoveSpeed;
-
     public float GroundDrag;
-
     public float JumpForce;
     public float JumpCooldown;
     public float AirMultliplier;
@@ -20,19 +18,16 @@ public class PlayerMovement : MonoBehaviour
     [Header("Ground Check")]
     public float playerHeight;
     public LayerMask whatIsGround;
-    [SerializeField] private bool grounded;
-
+    public bool isGrounded;
     public Transform Orientation;
-    
     public bool Freeze = false;
     public bool ActiveGrapple;
-    private bool hasStarted = false; 
 
+    private bool hasStarted = false;
+    private bool enableMovementOnNextTouch;
     private float horizontalInput;
     private float verticalInput;
-
     private Vector3 moveDirection;
-
     Rigidbody rb;
 
     private void Start()
@@ -41,23 +36,14 @@ public class PlayerMovement : MonoBehaviour
         rb.freezeRotation = true;
     }
 
-
     private void Update()
     {
-        // ground check
-        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
-
-        //if (Freeze)
-        //{
-        //    rb.velocity = Vector3.zero;
-        //    return;
-        //}
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
 
         MyInput();
         SpeedControl();
 
-        // handle drag
-        if (grounded && !ActiveGrapple)
+        if (isGrounded && !ActiveGrapple)
             rb.drag = GroundDrag;
         else
             rb.drag = 0;
@@ -68,17 +54,15 @@ public class PlayerMovement : MonoBehaviour
         MovePlayer();
     }
 
-    private void MyInput() 
+    private void MyInput()
     {
         horizontalInput = Input.GetAxis("Horizontal");
         verticalInput = Input.GetAxis("Vertical");
 
-        if (Input.GetKey(jumpKey) && isReadyToJump && grounded)
+        if (Input.GetKey(jumpKey) && isReadyToJump && isGrounded)
         {
             isReadyToJump = false;
-
             Jump();
-
             Invoke(nameof(ResetJump), JumpCooldown);
         }
     }
@@ -88,12 +72,7 @@ public class PlayerMovement : MonoBehaviour
         if (ActiveGrapple) return;
 
         moveDirection = Orientation.forward * verticalInput + Orientation.right * horizontalInput;
-
-        if (grounded)
-            rb.AddForce(moveDirection * MoveSpeed * 10, ForceMode.Force);
-
-        else if (!grounded)
-            rb.AddForce(moveDirection * MoveSpeed * 10 , ForceMode.Force);
+        rb.AddForce(moveDirection * MoveSpeed * 10, ForceMode.Force);
     }
 
     private void SpeedControl()
@@ -112,7 +91,6 @@ public class PlayerMovement : MonoBehaviour
     private void Jump()
     {
         rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
-
         rb.AddForce(transform.up * JumpForce, ForceMode.Impulse);
     }
 
@@ -121,19 +99,19 @@ public class PlayerMovement : MonoBehaviour
         isReadyToJump = true;
     }
 
-    private bool enableMovementOnNextTouch;
+
 
     public void JumpToPosition(Vector3 targetPosition, float trajectoryHeight, int grappleType)
     {
-        ActiveGrapple = true; 
-        if(grappleType == 1) 
-        { 
-        velocityToSet = CalculateJumpVelocity(transform.position, targetPosition, trajectoryHeight); 
-        velocityToSet = velocityToSet + (Vector3.up);
-        } 
+        ActiveGrapple = true;
+        if (grappleType == 1)
+        {
+            velocityToSet = CalculateJumpVelocity(transform.position, targetPosition, trajectoryHeight);
+            velocityToSet = velocityToSet + (Vector3.up);
+        }
         else if (grappleType == 2)
         {
-            velocityToSet = CalculateJumpVelocity(transform.position, targetPosition, trajectoryHeight * .25f); 
+            velocityToSet = CalculateJumpVelocity(transform.position, targetPosition, trajectoryHeight * .25f);
         }
 
         Invoke(nameof(SetVelocity), 0.1f);
@@ -174,28 +152,27 @@ public class PlayerMovement : MonoBehaviour
 
         if (enableMovementOnNextTouch)
         {
-            enableMovementOnNextTouch = false; 
+            enableMovementOnNextTouch = false;
             GetComponent<GrappleHook>().StopGrapple();
         }
 
-        //If its Pullable Layer then freeze both.
-        if(collision.gameObject.layer == LayerMask.NameToLayer("Pullable") || collision.gameObject.CompareTag("Pullable"))
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Pullable") || collision.gameObject.CompareTag("Pullable"))
         {
             collision.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
             rb.velocity = Vector3.zero;
         }
 
-        if(collision.gameObject.layer == LayerMask.NameToLayer("Grappleable") && collision.gameObject.CompareTag("Enemy"))
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Grappleable") && collision.gameObject.CompareTag("Enemy"))
         {
             Destroy(collision.gameObject);
-        } 
+        }
 
-        if(collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
-        { 
-                if (ActiveGrapple)
-                    Debug.LogError("You're not Dead!");
-                else
-                    Debug.LogError("You're Dead!"); 
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        {
+            if (ActiveGrapple)
+                Debug.LogError("You're not Dead!");
+            else
+                Debug.LogError("You're Dead!");
         }
 
         ResetRestrictions();

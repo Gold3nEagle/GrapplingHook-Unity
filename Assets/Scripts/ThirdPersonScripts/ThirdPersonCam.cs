@@ -12,49 +12,22 @@ public class ThirdPersonCam : MonoBehaviour
     public Rigidbody rb;
 
     public float RotationSpeed;
-
-    public CameraStyle CurrentStyle;
-
     public Transform CombatLookAt;
-
-    public enum CameraStyle
-    {
-        Basic,
-        Combat,
-        Topdown
-    }
 
     private void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked; 
+        Cursor.visible = false; 
     }
 
     private void Update()
     {
-        // rotate orientation
         Vector3 viewDirection = Player.position - new Vector3(transform.position.x, Player.position.y, transform.position.z);
-        Orientation.forward = viewDirection.normalized;
+        Orientation.forward = viewDirection.normalized; 
+        Vector3 dirToCombatLookAt = CombatLookAt.position - new Vector3(transform.position.x, CombatLookAt.position.y, transform.position.z);
+        Orientation.forward = dirToCombatLookAt.normalized; 
+        PlayerObject.forward = dirToCombatLookAt.normalized;
 
-        // rotate player object
-        if (CurrentStyle == CameraStyle.Basic)
-        {
-            float horizontalInput = Input.GetAxis("Horizontal");
-            float verticalInput = Input.GetAxis("Vertical");
-
-            Vector3 inputDirection = Orientation.forward * verticalInput + Orientation.right * horizontalInput;
-
-            if (inputDirection != Vector3.zero)
-                PlayerObject.forward = Vector3.Slerp(PlayerObject.forward, inputDirection.normalized, Time.deltaTime * RotationSpeed);
-        }
-        else if (CurrentStyle == CameraStyle.Combat)
-        {
-            Vector3 dirToCombatLookAt = CombatLookAt.position - new Vector3(transform.position.x, CombatLookAt.position.y, transform.position.z);
-            Orientation.forward = dirToCombatLookAt.normalized;
-
-            PlayerObject.forward = dirToCombatLookAt.normalized;
-        }
-        
 
     }
 
