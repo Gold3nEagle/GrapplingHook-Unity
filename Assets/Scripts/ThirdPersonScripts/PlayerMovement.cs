@@ -122,11 +122,19 @@ public class PlayerMovement : MonoBehaviour
 
     private bool enableMovementOnNextTouch;
 
-    public void JumpToPosition(Vector3 targetPosition, float trajectoryHeight)
+    public void JumpToPosition(Vector3 targetPosition, float trajectoryHeight, int grappleType)
     {
-        ActiveGrapple = true;
-        velocityToSet = CalculateJumpVelocity(transform.position, targetPosition, trajectoryHeight);
-        velocityToSet = velocityToSet + (Vector3.up * 2);
+        ActiveGrapple = true; 
+        if(grappleType == 1) 
+        { 
+        velocityToSet = CalculateJumpVelocity(transform.position, targetPosition, trajectoryHeight); 
+        velocityToSet = velocityToSet + (Vector3.up);
+        } 
+        else if (grappleType == 2)
+        {
+            velocityToSet = CalculateJumpVelocity(transform.position, targetPosition, trajectoryHeight * .25f); 
+        }
+
         Invoke(nameof(SetVelocity), 0.1f);
     }
 
@@ -166,11 +174,16 @@ public class PlayerMovement : MonoBehaviour
         }
 
         //If its Pullable Layer then freeze both.
-        if(collision.gameObject.layer == 6)
+        if(collision.gameObject.layer == LayerMask.NameToLayer("Pullable") || collision.gameObject.CompareTag("Pullable"))
         {
             collision.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
             rb.velocity = Vector3.zero;
         }
+
+        if(collision.gameObject.layer == LayerMask.NameToLayer("Grappleable") && collision.gameObject.CompareTag("Enemy"))
+        {
+            Destroy(collision.gameObject);
+        } 
     }
 
 }

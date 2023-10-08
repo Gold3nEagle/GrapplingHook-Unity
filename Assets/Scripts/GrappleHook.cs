@@ -12,6 +12,7 @@ public class GrappleHook : MonoBehaviour
     [SerializeField] private Transform gunTip;
     [SerializeField] private LayerMask whatIsGrappleable;
     [SerializeField] private LineRenderer gunLineRenderer;
+    int grappleType;
 
     [Header("Grappling")]
     [SerializeField] private float maxGrappleDistance;
@@ -29,7 +30,7 @@ public class GrappleHook : MonoBehaviour
     public KeyCode grappleKey = KeyCode.Mouse1;
 
     [SerializeField] private float pullForce = 10f; 
-    private bool isGrappling;
+    private bool isGrappling; 
 
     public Transform pullToPosition;
 
@@ -37,7 +38,7 @@ public class GrappleHook : MonoBehaviour
     void Start()
     {
         playerMovement = GetComponent<PlayerMovement>();
-        cam = Camera.main.transform;
+        cam = Camera.main.transform; 
     }
 
     private void Update()
@@ -66,16 +67,28 @@ public class GrappleHook : MonoBehaviour
         // Check for objects that can be grappled or pulled
         if (Physics.Raycast(cam.position, cam.forward, out RaycastHit hit, maxGrappleDistance, whatIsGrappleable))
         {
-            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Grappleable"))
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Grappleable") && !hit.collider.gameObject.CompareTag("Enemy"))
             {
+                grappleType = 1;
+                grapplePoint = hit.point;
+                Invoke(nameof(ExcuteGrapple), grappleDelayTime);
+            }
+            else if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Grappleable") && hit.collider.gameObject.CompareTag("Enemy"))
+            {
+                grappleType = 2;
                 grapplePoint = hit.point;
                 Invoke(nameof(ExcuteGrapple), grappleDelayTime);
             }
             else if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Pullable"))
-            {
-                // Implement pulling logic here
+            { 
                 grapplePoint = hit.point;
                 PullObject(hit.collider.gameObject);
+            }
+            else if(hit.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
+            {
+                grappleType = 2;
+                grapplePoint = hit.point;
+                Invoke(nameof(ExcuteGrapple), grappleDelayTime);
             }
         }
         // if there is no hit
@@ -100,7 +113,7 @@ public class GrappleHook : MonoBehaviour
 
         // Optionally, you can disable any physics interactions with the pulled object
         // objectToPull.GetComponent<Rigidbody>().isKinematic = true;
-        Invoke(nameof(StopGrapple), 1f);
+        Invoke(nameof(StopGrapple), .25f);
     }
 
 
@@ -115,7 +128,7 @@ public class GrappleHook : MonoBehaviour
 
         if (grapplePointRealtiveYPos < 0) highestPointOnArc = overshootYAxis;
 
-        playerMovement.JumpToPosition(grapplePoint, highestPointOnArc);
+        playerMovement.JumpToPosition(grapplePoint, highestPointOnArc, grappleType);
         Invoke(nameof(StopGrapple), 1f);
 
     }
