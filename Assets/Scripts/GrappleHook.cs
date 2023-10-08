@@ -6,7 +6,7 @@ using UnityEngine;
 public class GrappleHook : MonoBehaviour
 {
     [Header("Refrences")]
-    private PlayerMovement player;
+    private PlayerMovement playerMovement;
     [SerializeField] private Transform cam;
     [SerializeField] private Transform orientation;
     [SerializeField] private Transform gunTip;
@@ -28,12 +28,15 @@ public class GrappleHook : MonoBehaviour
     [Header("Input")]
     public KeyCode grappleKey = KeyCode.Mouse1;
 
+    [SerializeField] private float pullForce = 10f; 
     private bool isGrappling;
 
-    
+    public Transform pullToPosition;
+
+
     void Start()
     {
-        player = GetComponent<PlayerMovement>();
+        playerMovement = GetComponent<PlayerMovement>();
         cam = Camera.main.transform;
     }
 
@@ -58,13 +61,22 @@ public class GrappleHook : MonoBehaviour
         if (grapplingCoolDownTimer > 0) return;
 
         isGrappling = true;
-        player.Freeze = true;
+        playerMovement.Freeze = true;
 
-        // if there is a hit
+        // Check for objects that can be grappled or pulled
         if (Physics.Raycast(cam.position, cam.forward, out RaycastHit hit, maxGrappleDistance, whatIsGrappleable))
         {
-            grapplePoint = hit.point;
-            Invoke(nameof(ExcuteGrapple), grappleDelayTime);
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Grappleable"))
+            {
+                grapplePoint = hit.point;
+                Invoke(nameof(ExcuteGrapple), grappleDelayTime);
+            }
+            else if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Pullable"))
+            {
+                // Implement pulling logic here
+                grapplePoint = hit.point;
+                PullObject(hit.collider.gameObject);
+            }
         }
         // if there is no hit
         else
@@ -76,12 +88,25 @@ public class GrappleHook : MonoBehaviour
         // enable the visuals
         gunLineRenderer.enabled = true;
         gunLineRenderer.SetPosition(1, grapplePoint);
-
     }
+
+    private void PullObject(GameObject objectToPull)
+    {
+        // Calculate the direction from the player to the object
+        Vector3 pullDirection = (objectToPull.transform.position - transform.position).normalized;
+
+        // Apply force to pull the object towards the player
+        objectToPull.GetComponent<Rigidbody>().AddForce(pullDirection * pullForce, ForceMode.Impulse); 
+
+        // Optionally, you can disable any physics interactions with the pulled object
+        // objectToPull.GetComponent<Rigidbody>().isKinematic = true;
+        Invoke(nameof(StopGrapple), 1f);
+    }
+
 
     private void ExcuteGrapple()
     {
-        player.Freeze = false;
+        playerMovement.Freeze = false;
 
         Vector3 lowestPoint = new Vector3(transform.position.x, transform.position.y - 1f, transform.position.z);
 
@@ -90,14 +115,14 @@ public class GrappleHook : MonoBehaviour
 
         if (grapplePointRealtiveYPos < 0) highestPointOnArc = overshootYAxis;
 
-        player.JumpToPosition(grapplePoint, highestPointOnArc);
+        playerMovement.JumpToPosition(grapplePoint, highestPointOnArc);
         Invoke(nameof(StopGrapple), 1f);
 
     }
 
     public void StopGrapple()
     {
-        player.Freeze = false;
+        playerMovement.Freeze = false;
 
         isGrappling = false;
         grapplingCoolDownTimer = grapplingCoolDown;

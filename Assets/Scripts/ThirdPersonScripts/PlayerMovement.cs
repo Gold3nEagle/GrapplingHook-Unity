@@ -164,6 +164,13 @@ public class PlayerMovement : MonoBehaviour
 
             GetComponent<GrappleHook>().StopGrapple();
         }
+
+        //If its Pullable Layer then freeze both.
+        if(collision.gameObject.layer == 6)
+        {
+            collision.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            rb.velocity = Vector3.zero;
+        }
     }
 
 }
