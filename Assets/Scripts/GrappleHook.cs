@@ -6,8 +6,9 @@ using UnityEngine;
 public class GrappleHook : MonoBehaviour
 {
     [Header("Refrences")]
-    private ThirdPersonController player;
+    private PlayerMovement player;
     [SerializeField] private Transform cam;
+    [SerializeField] private Transform orientation;
     [SerializeField] private Transform gunTip;
     [SerializeField] private LayerMask whatIsGrappleable;
     [SerializeField] private LineRenderer gunLineRenderer;
@@ -15,6 +16,7 @@ public class GrappleHook : MonoBehaviour
     [Header("Grappling")]
     [SerializeField] private float maxGrappleDistance;
     [SerializeField] private float grappleDelayTime;
+    [SerializeField] private float overshootYAxis;
 
     [SerializeField] private Vector3 grapplePoint;
 
@@ -31,7 +33,8 @@ public class GrappleHook : MonoBehaviour
     
     void Start()
     {
-        player = GetComponent<ThirdPersonController>();
+        player = GetComponent<PlayerMovement>();
+        cam = Camera.main.transform;
     }
 
     private void Update()
@@ -57,17 +60,20 @@ public class GrappleHook : MonoBehaviour
         isGrappling = true;
         player.Freeze = true;
 
+        // if there is a hit
         if (Physics.Raycast(cam.position, cam.forward, out RaycastHit hit, maxGrappleDistance, whatIsGrappleable))
         {
             grapplePoint = hit.point;
             Invoke(nameof(ExcuteGrapple), grappleDelayTime);
         }
+        // if there is no hit
         else
         {
             grapplePoint = cam.position + cam.forward * maxGrappleDistance;
             Invoke(nameof(StopGrapple), grappleDelayTime);
         }
 
+        // enable the visuals
         gunLineRenderer.enabled = true;
         gunLineRenderer.SetPosition(1, grapplePoint);
 
@@ -76,9 +82,20 @@ public class GrappleHook : MonoBehaviour
     private void ExcuteGrapple()
     {
         player.Freeze = false;
+
+        Vector3 lowestPoint = new Vector3(transform.position.x, transform.position.y - 1f, transform.position.z);
+
+        float grapplePointRealtiveYPos = grapplePoint.y - lowestPoint.y;
+        float highestPointOnArc = grapplePointRealtiveYPos + overshootYAxis;
+
+        if (grapplePointRealtiveYPos < 0) highestPointOnArc = overshootYAxis;
+
+        player.JumpToPosition(grapplePoint, highestPointOnArc);
+        Invoke(nameof(StopGrapple), 1f);
+
     }
 
-    private void StopGrapple()
+    public void StopGrapple()
     {
         player.Freeze = false;
 
