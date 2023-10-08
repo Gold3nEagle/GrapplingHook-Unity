@@ -18,6 +18,12 @@ namespace StarterAssets
         [Tooltip("Move speed of the character in m/s")]
         public float MoveSpeed = 2.0f;
 
+        [Tooltip("Freeze player and prevent input for this script")]
+        public bool Freeze = false;
+
+        [Tooltip("used for applyting the grapple grab jump")]
+        public bool activeGrapple = false;
+
         [Tooltip("Sprint speed of the character in m/s")]
         public float SprintSpeed = 5.335f;
 
@@ -156,9 +162,29 @@ namespace StarterAssets
         {
             _hasAnimator = TryGetComponent(out _animator);
 
+            if (activeGrapple)
+                GrappleJumpLogic();
+
+            if (Freeze)
+                return;
+
             JumpAndGravity();
             GroundedCheck();
             Move();
+        }
+
+
+        private Vector3 velocity;
+
+        private void GrappleJumpLogic()
+        {
+            //velocity = Vector3.zero;
+            //Vector3 jumpVelocity = CalculateJumpVelocity(transform.position, targetPosition, trajectoryHeight);
+            //velocity = jumpVelocity;
+
+            //// Move the character
+            //_controller.Move(velocity * Time.deltaTime);
+
         }
 
         private void LateUpdate()
@@ -388,5 +414,24 @@ namespace StarterAssets
                 AudioSource.PlayClipAtPoint(LandingAudioClip, transform.TransformPoint(_controller.center), FootstepAudioVolume);
             }
         }
+
+        public void JumpToPosition(Vector3 targetPosition, float trajectoryHeight)
+        {
+            //rb.velocity = CalculateJumpVelocity(transform.position, targetPosition, trajectoryHeight);
+        }
+
+        public Vector3 CalculateJumpVelocity(Vector3 startPoint, Vector3 endPoint, float trajectoryHeight)
+        {
+            float gravity = Physics.gravity.y;
+            float displacmentY = endPoint.y - startPoint.y;
+            Vector3 displacmentXZ = new Vector3(endPoint.x - startPoint.x, 0f, endPoint.z - startPoint.z);
+
+            Vector3 velocityY = Vector3.up * Mathf.Sqrt(-2 * gravity * trajectoryHeight);
+            Vector3 velocityXZ = displacmentXZ / (Mathf.Sqrt(-2 * trajectoryHeight / gravity)
+                + Mathf.Sqrt(2 * (displacmentY - trajectoryHeight) / gravity));
+
+            return velocityXZ + velocityY;
+        }
+
     }
 }

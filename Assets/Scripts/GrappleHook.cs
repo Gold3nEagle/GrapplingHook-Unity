@@ -55,6 +55,7 @@ public class GrappleHook : MonoBehaviour
         if (grapplingCoolDownTimer > 0) return;
 
         isGrappling = true;
+        player.Freeze = true;
 
         if (Physics.Raycast(cam.position, cam.forward, out RaycastHit hit, maxGrappleDistance, whatIsGrappleable))
         {
@@ -74,11 +75,13 @@ public class GrappleHook : MonoBehaviour
 
     private void ExcuteGrapple()
     {
-
+        player.Freeze = false;
     }
 
     private void StopGrapple()
     {
+        player.Freeze = false;
+
         isGrappling = false;
         grapplingCoolDownTimer = grapplingCoolDown;
 
