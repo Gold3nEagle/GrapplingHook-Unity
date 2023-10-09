@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public float MoveSpeed { get => moveSpeed; }
+
     private float moveSpeed;
 
     [Header("Movement")]
@@ -157,6 +159,7 @@ public class PlayerMovement : MonoBehaviour
     }
 
     private Vector3 velocityToSet;
+
     private void SetVelocity()
     {
         enableMovementOnNextTouch = true;
