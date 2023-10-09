@@ -16,12 +16,17 @@ public class Swinging : MonoBehaviour
     private Vector3 swingPoint;
     private SpringJoint joint;
 
-    [Header("Swinging")]
+    [Header("OdmGear")]
     public Transform Orientation;
     public Rigidbody RB;
     public float HorizontalThrustForce;
     public float ForwardThrustForce;
     public float ExtendCableSpeed;
+
+    [Header("Prediction")]
+    public RaycastHit predictionHit;
+    public float predictionSphereCastRadius;
+    public Transform predictionPoint;
 
     [Header("Input")]
     public KeyCode swingKey = KeyCode.Mouse0;
@@ -38,8 +43,55 @@ public class Swinging : MonoBehaviour
         if (Input.GetKeyDown(swingKey)) StartSwing();
         if (Input.GetKeyUp(swingKey)) StopSwing();
 
+        CheckForSwingPoints();
+
         if (joint != null) OdmGearMovement();
 
+    }
+    private void LateUpdate()
+    {
+        DrawRope();
+    }
+
+    private void CheckForSwingPoints()
+    {
+        if (joint != null) return;
+
+        RaycastHit sphereCastHit;
+        Physics.SphereCast(Cam.position, predictionSphereCastRadius, Cam.forward,
+                            out sphereCastHit, maxSwingDistance, WhatIsGrappleable);
+
+        RaycastHit raycastHit;
+        Physics.Raycast(Cam.position, Cam.forward,
+                            out raycastHit, maxSwingDistance, WhatIsGrappleable);
+
+        Vector3 realHitPoint;
+
+        // Option 1 - Direct Hit
+        if (raycastHit.point != Vector3.zero)
+            realHitPoint = raycastHit.point;
+
+        // Option 2 - Indirect (predicted) Hit
+        else if (sphereCastHit.point != Vector3.zero)
+            realHitPoint = sphereCastHit.point;
+
+        // Option 3 - Miss
+        else
+            realHitPoint = Vector3.zero;
+
+        // realHitPoint found
+        if (realHitPoint != Vector3.zero)
+        {
+            predictionPoint.gameObject.SetActive(true);
+            predictionPoint.position = realHitPoint;
+        }
+        // realHitPoint not found
+        else
+        {
+            predictionPoint.gameObject.SetActive(false);
+        }
+
+        predictionHit = raycastHit.point == Vector3.zero ? sphereCastHit : raycastHit;
     }
 
     private void OdmGearMovement()
@@ -73,41 +125,36 @@ public class Swinging : MonoBehaviour
         }
     }
 
-    private void LateUpdate()
-    {
-        DrawRope();
-    }
-
     private void StartSwing()
     {
-        PlayerMovement.Swinging = true;
+        // return if predictionHit not found
+        if (predictionHit.point == Vector3.zero) return;
 
-        GetComponent<GrappleHook>().StopGrapple();
+        // deactivate active grapple
+        if (GetComponent<GrappleHook>() != null)
+            GetComponent<GrappleHook>().StopGrapple();
         PlayerMovement.ResetRestrictions();
 
+        PlayerMovement.Swinging = true;
 
-        RaycastHit hit;
-        if (Physics.Raycast(Cam.position, Cam.forward, out hit, maxSwingDistance, WhatIsGrappleable))
-        {
-            swingPoint = hit.point;
-            joint = Player.gameObject.AddComponent<SpringJoint>();
-            joint.autoConfigureConnectedAnchor = false;
-            joint.connectedAnchor = swingPoint;
+        swingPoint = predictionHit.point;
+        joint = Player.gameObject.AddComponent<SpringJoint>();
+        joint.autoConfigureConnectedAnchor = false;
+        joint.connectedAnchor = swingPoint;
 
-            float distancFromPoint = Vector3.Distance(Player.position, swingPoint);
+        float distanceFromPoint = Vector3.Distance(Player.position, swingPoint);
 
-            // the distance grapple will try to keep from grapple point
-            joint.maxDistance = distancFromPoint * 0.8f;
-            joint.minDistance = distancFromPoint * 0.25f;
+        // the distance grapple will try to keep from grapple point. 
+        joint.maxDistance = distanceFromPoint * 0.8f;
+        joint.minDistance = distanceFromPoint * 0.25f;
 
-            // customize values as you like
-            joint.spring = 4.5f;
-            joint.damper = 7f;
-            joint.massScale = 4.5f;
+        // customize values as you like
+        joint.spring = 4.5f;
+        joint.damper = 7f;
+        joint.massScale = 4.5f;
 
-            lineRenderer.positionCount = 2;
-            currentGrapplePosition = GunTip.position;
-        }
+        lineRenderer.positionCount = 2;
+        currentGrapplePosition = GunTip.position;
 
     }
 

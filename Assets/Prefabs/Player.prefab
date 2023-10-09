@@ -518,6 +518,8 @@ MonoBehaviour:
   HorizontalThrustForce: 2000
   ForwardThrustForce: 3000
   ExtendCableSpeed: 20
+  predictionSphereCastRadius: 2
+  predictionPoint: {fileID: 0}
   swingKey: 323
 --- !u!1 &2442790502295100264
 GameObject:
