@@ -1220,6 +1220,7 @@ GameObject:
   - component: {fileID: 497856555}
   - component: {fileID: 497856554}
   - component: {fileID: 497856553}
+  - component: {fileID: 497856556}
   m_Layer: 0
   m_Name: cm
   m_TagString: Untagged
@@ -1334,6 +1335,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &497856556
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 497856551}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68bb026fafb42b14791938953eaace77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_NoiseProfile: {fileID: 11400000, guid: 69ce8388f6785dd4c8c39915efece2f4, type: 2}
+  m_PivotOffset: {x: 1, y: 1, z: 1}
+  m_AmplitudeGain: 1
+  m_FrequencyGain: 1
+  mNoiseOffsets: {x: 83.99927, y: -456.39835, z: 537.83154}
 --- !u!54 &535032498 stripped
 Rigidbody:
   m_CorrespondingSourceObject: {fileID: 2442790502079889038, guid: a6924db186c56b7439561607d0f3b757, type: 3}
@@ -2261,6 +2279,7 @@ GameObject:
   - component: {fileID: 812193071}
   - component: {fileID: 812193070}
   - component: {fileID: 812193069}
+  - component: {fileID: 812193072}
   m_Layer: 0
   m_Name: cm
   m_TagString: Untagged
@@ -2375,6 +2394,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &812193072
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 812193067}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68bb026fafb42b14791938953eaace77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_NoiseProfile: {fileID: 11400000, guid: 69ce8388f6785dd4c8c39915efece2f4, type: 2}
+  m_PivotOffset: {x: 1, y: 1, z: 1}
+  m_AmplitudeGain: 1
+  m_FrequencyGain: 1
+  mNoiseOffsets: {x: 0, y: 0, z: 0}
 --- !u!4 &839579200 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8944336655422409503, guid: f6d148d888ffbf54b9afe9936dfaec1f, type: 3}
@@ -3043,6 +3079,7 @@ GameObject:
   - component: {fileID: 1079415723}
   - component: {fileID: 1079415722}
   - component: {fileID: 1079415721}
+  - component: {fileID: 1079415724}
   m_Layer: 0
   m_Name: cm
   m_TagString: Untagged
@@ -3157,6 +3194,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1079415724
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1079415719}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68bb026fafb42b14791938953eaace77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_NoiseProfile: {fileID: 11400000, guid: 69ce8388f6785dd4c8c39915efece2f4, type: 2}
+  m_PivotOffset: {x: 1, y: 1, z: 1}
+  m_AmplitudeGain: 1
+  m_FrequencyGain: 1
+  mNoiseOffsets: {x: 0, y: 0, z: 0}
 --- !u!1 &1107824715
 GameObject:
   m_ObjectHideFlags: 0
@@ -4692,7 +4746,7 @@ ParticleSystem:
     sphericalDirectionAmount: 0
     randomPositionAmount: 0
     radius:
-      value: 2.37
+      value: 3.36
       mode: 0
       spread: 0
       speed:
@@ -9068,6 +9122,8 @@ MonoBehaviour:
   minFastSpeedThreshold: 8
   maxFastSpeedThreshold: 12
   interpolationSpeed: 5
+  shakeAmplitude: 1.2
+  shakeFrequency: 1.2
 --- !u!4 &1662609949
 Transform:
   m_ObjectHideFlags: 0

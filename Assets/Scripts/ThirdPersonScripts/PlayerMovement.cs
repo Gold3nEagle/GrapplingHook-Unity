@@ -6,6 +6,8 @@ public class PlayerMovement : MonoBehaviour
 {
     public float MoveSpeed { get => moveSpeed; }
 
+    public float Velocity { get => rb.velocity.magnitude; }
+
     private float moveSpeed;
 
     [Header("Movement")]
