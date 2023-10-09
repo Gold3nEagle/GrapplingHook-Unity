@@ -448,8 +448,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GroundSpeed: 7
-  AirSpeed: 10
-  SwingSpeed: 10
+  AirSpeed: 12
+  SwingSpeed: 20
   GroundDrag: 5
   JumpForce: 5
   JumpCooldown: 0.25
@@ -505,14 +505,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lineRenderer: {fileID: 2330483270096842404}
-  gunTip: {fileID: 3331644084668825120}
-  cam: {fileID: 0}
-  player: {fileID: 2442790502079889039}
-  whatIsGrappleable:
+  GunTip: {fileID: 3331644084668825120}
+  Cam: {fileID: 0}
+  Player: {fileID: 2442790502079889039}
+  WhatIsGrappleable:
     serializedVersion: 2
     m_Bits: 136
-  playerMovement: {fileID: 2442790502079889033}
+  PlayerMovement: {fileID: 2442790502079889033}
   maxSwingDistance: 50
+  Orientation: {fileID: 2442790501415271057}
+  RB: {fileID: 2442790502079889038}
+  HorizontalThrustForce: 10
+  ForwardThrustForce: 10
+  ExtendCableSpeed: 5
   swingKey: 323
 --- !u!1 &2442790502295100264
 GameObject:
