@@ -4,8 +4,12 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    private float moveSpeed;
+
     [Header("Movement")]
-    public float MoveSpeed;
+    public float GroundSpeed;
+    public float AirSpeed;
+    public float SwingSpeed;
     public float GroundDrag;
     public float JumpForce;
     public float JumpCooldown;
@@ -20,8 +24,6 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask whatIsGround;
     public bool isGrounded;
     public Transform Orientation;
-    public bool Freeze = false;
-    public bool ActiveGrapple;
 
     private bool hasStarted = false;
     private bool enableMovementOnNextTouch;
@@ -29,6 +31,20 @@ public class PlayerMovement : MonoBehaviour
     private float verticalInput;
     private Vector3 moveDirection;
     Rigidbody rb;
+
+    public bool Freeze = false;
+    public bool ActiveGrapple;
+    public bool Swinging;
+
+    public MovementState state;
+
+    public enum MovementState
+    {
+        ground,
+        grappling,
+        swinging,
+        air
+    }
 
     private void Start()
     {
@@ -42,6 +58,7 @@ public class PlayerMovement : MonoBehaviour
 
         MyInput();
         SpeedControl();
+        StateHandler();
 
         if (isGrounded && !ActiveGrapple)
             rb.drag = GroundDrag;
@@ -67,12 +84,34 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    private void StateHandler()
+    {
+        if (isGrounded)
+        {
+            state = MovementState.ground;
+            moveSpeed = GroundSpeed;
+
+        }
+
+        else if (ActiveGrapple)
+        {
+            state = MovementState.grappling;
+            moveSpeed = AirSpeed;
+        }
+
+        else if (Swinging)
+        {
+            state = MovementState.grappling;
+            moveSpeed = SwingSpeed;
+        }
+    }
+
     private void MovePlayer()
     {
-        if (ActiveGrapple) return;
+        if (ActiveGrapple || Swinging) return;
 
         moveDirection = Orientation.forward * verticalInput + Orientation.right * horizontalInput;
-        rb.AddForce(moveDirection * MoveSpeed * 10, ForceMode.Force);
+        rb.AddForce(moveDirection * moveSpeed * 10, ForceMode.Force);
     }
 
     private void SpeedControl()
@@ -81,9 +120,9 @@ public class PlayerMovement : MonoBehaviour
 
         Vector3 flatVelocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
 
-        if (flatVelocity.magnitude > MoveSpeed)
+        if (flatVelocity.magnitude > moveSpeed)
         {
-            Vector3 limitedVel = flatVelocity.normalized * MoveSpeed;
+            Vector3 limitedVel = flatVelocity.normalized * moveSpeed;
             rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
         }
     }

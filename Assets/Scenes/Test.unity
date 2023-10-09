@@ -315,7 +315,7 @@ MeshRenderer:
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
   m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
+  m_SelectedEditorRenderState: 2
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
@@ -2386,7 +2386,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh30152
+  m_Name: pb_Mesh19842
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -2704,7 +2704,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh30202
+  m_Name: pb_Mesh19886
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -2868,7 +2868,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh30286
+  m_Name: pb_Mesh19956
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -3914,7 +3914,6 @@ MonoBehaviour:
   PlayerObject: {fileID: 53991253}
   rb: {fileID: 535032498}
   RotationSpeed: 5
-  CurrentStyle: 1
   CombatLookAt: {fileID: 2442790502308285501}
 --- !u!114 &1402053130
 MonoBehaviour:
@@ -4323,7 +4322,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh30298
+  m_Name: pb_Mesh19968
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -4563,18 +4562,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1855847181988581755, guid: a6924db186c56b7439561607d0f3b757, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1855847181988581755, guid: a6924db186c56b7439561607d0f3b757, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1855847181988581755, guid: a6924db186c56b7439561607d0f3b757, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2442790502079889037, guid: a6924db186c56b7439561607d0f3b757, type: 3}
       propertyPath: m_Name
       value: Player
@@ -4623,22 +4610,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2442790502295100265, guid: a6924db186c56b7439561607d0f3b757, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2442790502295100265, guid: a6924db186c56b7439561607d0f3b757, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4993981387601950310, guid: a6924db186c56b7439561607d0f3b757, type: 3}
       propertyPath: cam
       value: 
       objectReference: {fileID: 1402053131}
     - target: {fileID: 4993981387601950310, guid: a6924db186c56b7439561607d0f3b757, type: 3}
-      propertyPath: pullForce
-      value: -1
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 9051027970468908164, guid: a6924db186c56b7439561607d0f3b757, type: 3}
+      propertyPath: cam
+      value: 
+      objectReference: {fileID: 1402053131}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a6924db186c56b7439561607d0f3b757, type: 3}
 --- !u!4 &2442790502308285501 stripped

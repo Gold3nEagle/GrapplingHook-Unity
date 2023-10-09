@@ -41,7 +41,7 @@ public class GrappleHook : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKey(grappleKey)) StartGrapple(); 
+        if (Input.GetKey(grappleKey) || Input.GetMouseButtonDown(1)) StartGrapple(); 
 
         if (grapplingCoolDownTimer > 0)
             grapplingCoolDownTimer -= Time.deltaTime;
