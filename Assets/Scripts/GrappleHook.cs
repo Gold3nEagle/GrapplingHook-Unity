@@ -43,6 +43,11 @@ public class GrappleHook : MonoBehaviour
 
     private void Update()
     {
+        if(Input.GetKey(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+
         if (Input.GetKey(grappleKey) || Input.GetMouseButtonDown(1)) StartGrapple(); 
 
         if (grapplingCoolDownTimer > 0)
