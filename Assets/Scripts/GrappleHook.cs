@@ -59,6 +59,9 @@ public class GrappleHook : MonoBehaviour
     {
         if (grapplingCoolDownTimer > 0) return;
 
+        // deactivate active swinging
+        GetComponent<Swinging>().StopSwing();
+
         isGrappling = true;
         playerMovement.Freeze = true;
 

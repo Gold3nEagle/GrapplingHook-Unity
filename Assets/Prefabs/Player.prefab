@@ -448,8 +448,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GroundSpeed: 7
-  AirSpeed: 12
-  SwingSpeed: 20
+  AirSpeed: 15
+  SwingSpeed: 17
   GroundDrag: 5
   JumpForce: 5
   JumpCooldown: 0.25
@@ -515,9 +515,9 @@ MonoBehaviour:
   maxSwingDistance: 50
   Orientation: {fileID: 2442790501415271057}
   RB: {fileID: 2442790502079889038}
-  HorizontalThrustForce: 10
-  ForwardThrustForce: 10
-  ExtendCableSpeed: 5
+  HorizontalThrustForce: 2000
+  ForwardThrustForce: 3000
+  ExtendCableSpeed: 20
   swingKey: 323
 --- !u!1 &2442790502295100264
 GameObject:

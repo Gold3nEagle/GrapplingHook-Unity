@@ -82,6 +82,10 @@ public class Swinging : MonoBehaviour
     {
         PlayerMovement.Swinging = true;
 
+        GetComponent<GrappleHook>().StopGrapple();
+        PlayerMovement.ResetRestrictions();
+
+
         RaycastHit hit;
         if (Physics.Raycast(Cam.position, Cam.forward, out hit, maxSwingDistance, WhatIsGrappleable))
         {
@@ -107,7 +111,7 @@ public class Swinging : MonoBehaviour
 
     }
 
-    private void StopSwing()
+    public void StopSwing()
     {
         PlayerMovement.Swinging = false;
 
