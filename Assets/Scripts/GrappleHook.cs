@@ -12,7 +12,8 @@ public class GrappleHook : MonoBehaviour
     [SerializeField] private Transform gunTip;
     [SerializeField] private LayerMask whatIsGrappleable;
     [SerializeField] private LineRenderer gunLineRenderer;
-    int grappleType;
+    private int grappleType;
+    private Swinging swingingComponent;
 
     [Header("Grappling")]
     [SerializeField] private float maxGrappleDistance;
@@ -37,6 +38,7 @@ public class GrappleHook : MonoBehaviour
     {
         playerMovement = GetComponent<PlayerMovement>();
         cam = Camera.main.transform;
+        swingingComponent = GetComponent<Swinging>();
     }
 
     private void Update()
@@ -65,8 +67,9 @@ public class GrappleHook : MonoBehaviour
         isGrappling = true;
         playerMovement.Freeze = true;
 
-        if (Physics.Raycast(cam.position, cam.forward, out RaycastHit hit, maxGrappleDistance, whatIsGrappleable))
+        if (swingingComponent.predictionHit.point != Vector3.zero)
         {
+            var hit = swingingComponent.predictionHit;
             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Grappleable") && !hit.collider.gameObject.CompareTag("Enemy"))
             {
                 grappleType = 1;
